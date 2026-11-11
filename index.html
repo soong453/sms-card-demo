@@ -3,38 +3,286 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>短信卡片静态演示</title>
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    .demo-disclaimer{position:fixed;left:216px;right:0;top:56px;z-index:3;padding:8px 24px;background:#fff7e6;border-bottom:1px solid #ffd591;color:#8a5a00;font-size:13px}
-    main{padding-top:116px}.demo-note{margin:0 0 16px;padding:12px 16px;background:#e8f3ff;border:1px solid #b7d9ff;border-radius:8px;color:#164a7b}
-    @media (max-width: 1180px){.demo-disclaimer{left:0}.sidebar{position:static;width:auto;height:auto}.topbar{left:0}.topbar .user{display:none}main{margin-left:0}.sidebar{display:flex;gap:8px;overflow:auto;padding:10px}.brand{margin:8px 16px 8px 0;white-space:nowrap}.nav{width:auto;white-space:nowrap}.editor-grid{grid-template-columns:1fr}.demo-disclaimer{top:56px}}
-  </style>
+  <title>短信卡片配置原型</title>
+  <link rel="stylesheet" href="styles.css?v=20261104-3">
 </head>
 <body>
-  <aside class="sidebar"><div class="brand">短信卡片演示</div><button class="nav active">配置列表</button><button class="nav">模板预览</button><button class="nav">说明</button></aside>
-  <header class="topbar"><span>静态作品集原型</span><span class="user">本地演示</span></header>
-  <div class="demo-disclaimer"><strong>演示环境：</strong>以下内容全部为虚构样例，仅用于界面展示与交互演示，不代表真实短信、号码、渠道或业务系统。</div>
+  <aside class="sidebar">
+    <div class="brand">短信卡片配置</div>
+    <button class="nav active">配置列表</button>
+    <button class="nav">模板管理</button>
+    <button class="nav">导出记录</button>
+    <button class="nav">操作日志</button>
+  </aside>
+
+  <header class="topbar">
+    <span>运营配置后台</span>
+    <span class="user">本地用户</span>
+  </header>
+
   <main>
     <section id="list" class="page active">
-      <div class="demo-note">保留三种手机卡片模板的布局、编辑与预览体验；数据仅保存在当前浏览器内，不会连接网络或后端。</div>
-      <div class="page-head"><h1>配置列表</h1><button class="primary" id="createBtn">新建配置</button></div>
-      <div class="toolbar"><input id="configSearchInput" placeholder="搜索配置名称/短信原文"><button id="clearSearchBtn" class="secondary clear-search" type="button">清空</button><select id="templateFilter"><option value="all">全部模板</option><option value="oppo">OPPO</option><option value="vivo">vivo</option><option value="honor">荣耀</option></select></div>
-      <table><thead><tr><th>配置名称</th><th>模板</th><th>演示来源</th><th>演示编号</th><th>短信分类</th><th>短信原文</th><th>卡片标题</th><th>状态</th><th>操作</th></tr></thead><tbody id="configTableBody"></tbody></table>
+      <div class="page-head">
+        <h1>配置列表</h1>
+        <button class="primary" id="createBtn">新建配置</button>
+      </div>
+      <div class="toolbar">
+        <input id="configSearchInput" placeholder="搜索配置名称/短信原文/通道号">
+        <button id="clearSearchBtn" class="secondary clear-search" type="button">清空</button>
+        <select id="templateFilter">
+          <option value="all">全部厂商模板</option>
+          <option value="oppo">OPPO</option>
+          <option value="vivo">vivo</option>
+          <option value="honor">荣耀</option>
+        </select>
+        <select id="statusFilter">
+          <option value="all">全部状态</option>
+          <option value="draft">草稿</option>
+          <option value="published">已发布</option>
+        </select>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>配置名称</th>
+            <th>厂商模板</th>
+            <th>商户名称</th>
+            <th>通道号</th>
+            <th>短信分类</th>
+            <th>短信原文</th>
+            <th>卡片标题</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="configTableBody">
+          <tr>
+            <td>移动充值成功后欠费提醒</td>
+            <td>OPPO</td>
+            <td>中国移动</td>
+            <td>10691117</td>
+            <td>充值成功</td>
+            <td>话费充值成功后仍欠费，请及时补缴</td>
+            <td><span class="tag">草稿</span></td>
+            <td><button class="link editBtn" data-config="oppo">编辑</button></td>
+          </tr>
+          <tr>
+            <td>vivo 流量超套提醒卡片</td>
+            <td>vivo</td>
+            <td>中国移动</td>
+            <td>10086096670</td>
+            <td>流量超套提醒</td>
+            <td>产生套外费用，及时充流量</td>
+            <td><span class="tag">草稿</span></td>
+            <td><button class="link editBtn" data-config="vivo">编辑</button></td>
+          </tr>
+          <tr>
+            <td>荣耀AI豆到期提醒</td>
+            <td>荣耀</td>
+            <td>中国移动</td>
+            <td>100862213</td>
+            <td>AI豆到期提醒</td>
+            <td>AI豆即将到期，请尽快使用</td>
+            <td><span class="tag">草稿</span></td>
+            <td><button class="link editBtn" data-config="honor">编辑</button></td>
+          </tr>
+        </tbody>
+      </table>
     </section>
+
     <section id="editor" class="page">
-      <div class="page-head"><div class="title-with-back"><button type="button" id="backListBtn" class="back-list-btn">返回列表</button><h1 id="editorTitle">编辑短信卡片配置</h1><span id="unsavedIndicator" class="unsaved-indicator" hidden>未保存修改</span><div class="editor-nav"><button type="button" id="prevConfigBtn">上一条</button><button type="button" id="nextConfigBtn">下一条</button></div></div><div class="actions"><button id="saveBtn">保存草稿</button><button id="saveAsBtn">另存草稿</button><button class="primary" id="checkBtn">预览校验</button></div></div>
-      <div class="editor-grid"><form class="panel" id="editorForm">
-        <h2>短信模板自动标注</h2><div class="sms-parser"><textarea id="smsTemplateInput" placeholder="输入虚构短信模板，例如：体验号 A-204 于 11 月 11 日完成一项演示提醒。"></textarea><div class="parser-actions"><button type="button" id="parseSmsBtn" class="primary">自动标注并生成</button><button type="button" id="clearSmsBtn">清空模板</button></div><label class="raw-mode-toggle"><input type="checkbox" id="rawOriginalModeToggle"> 未标注时按原文展示</label><p>规则解析仅在浏览器本地运行：识别日期、金额和简单键值对，不调用 AI、代理或接口。</p></div>
-        <h2>模板信息</h2><label>厂商模板<input id="factoryTemplateName" readonly></label>
-        <h2>基础信息</h2><label>配置名称<input id="configNameInput"></label><label>演示来源<input data-preview="merchantName"></label><label>演示编号<input data-preview="channelNo"></label><label>短信分类<input data-preview="smsCategory"></label>
-        <label class="icon-color-field">分类图标<span class="icon-color-options"><label><input type="radio" name="sourceIconColor" value="#2d7df0" checked><span class="swatch blue"></span>蓝色</label><label><input type="radio" name="sourceIconColor" value="#f6b51e"><span class="swatch yellow"></span>黄色</label><label><input type="radio" name="sourceIconColor" value="#24a85a"><span class="swatch green"></span>绿色</label><label><input type="radio" name="sourceIconColor" value="#ef6b45"><span class="swatch orange"></span>橙色</label></span></label>
-        <h2>卡片内容</h2><label>卡片标题<textarea data-preview="cardTitle"></textarea></label><div class="kv-editor"><div class="kv-title-row"><div><strong>key-value 字段</strong><p>字段会实时同步到右侧卡片。</p></div><button type="button" id="addKvBtn">添加字段</button></div><div class="kv-head"><span></span><span>key 名</span><span>value 值</span><span>样式</span><span>操作</span></div><div id="kvList" class="kv-list"></div></div>
-        <h2>按钮配置</h2><label>按钮文案<input data-preview="buttonText"></label><label>按钮链接<input id="buttonLinkInput" value="demo://preview"></label>
-      </form>
-      <div class="preview-panel"><div class="template-meta"><div><span>当前模板</span><strong id="templateName"></strong></div><button type="button" id="saveImageBtn" class="save-image-btn">保存图片</button></div><div id="phonePreview" class="phone-frame template-oppo" aria-label="短信卡片预览"><div class="phone-status"><strong>16:01</strong><span class="phone-icons">⌁ WiFi ▣ 46</span></div><div class="chat-head"><span class="back">‹</span><span class="carrier-logo honor-logo" aria-hidden="true"></span><div><div class="carrier" id="merchantName"></div><div class="number" id="channelNo"></div></div><div class="head-icons"><span class="phone-icon" aria-label="电话"></span><span class="more-icon">⋮</span></div></div><div class="chat-time">15:51</div><article class="sms-card"><div class="source-row"><span class="source-icon"></span><span id="smsCategory"></span></div><div class="honor-notice">通 知</div><h3 id="cardTitle"></h3><div id="rawSmsPreview" class="raw-sms-preview" hidden></div><div id="kvPreview" class="kv-preview"></div><div class="card-action-row" id="cardActionRow"><button class="card-button" id="buttonText"></button></div></article><a class="origin-link"><span class="origin-time">刚刚</span><span class="origin-text" id="originText">显示原文</span></a><div class="message-compose"><button class="compose-plus" aria-label="添加">+</button><div class="compose-input">短信</div><button class="compose-emoji" aria-label="表情">☻</button><button class="compose-send" aria-label="发送">➤</button></div><div id="honorMenuPreview" class="oppo-bottom-actions honor-bottom-actions"></div></div></div></div>
+      <div class="page-head">
+        <div class="title-with-back">
+          <button type="button" id="backListBtn" class="back-list-btn">返回列表</button>
+          <h1 id="editorTitle">编辑短信卡片配置</h1>
+          <span id="unsavedIndicator" class="unsaved-indicator" hidden>未保存修改</span>
+          <div class="editor-nav">
+            <button type="button" id="prevConfigBtn">上一条</button>
+            <button type="button" id="nextConfigBtn">下一条</button>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="saveBtn">保存草稿</button>
+          <button id="saveAsBtn">另存草稿</button>
+          <button class="primary" id="checkBtn">预览校验</button>
+        </div>
+      </div>
+
+      <div class="editor-grid">
+        <form class="panel">
+          <h2>短信模板自动标注</h2>
+          <div class="sms-parser">
+            <textarea id="smsTemplateInput" placeholder="粘贴完整短信模板，例如：【中国电信】业务退订违约金已扣除，请留意。手机号175****2397，业务咪咕哇里15G流量加月会员合约包（优惠），违约金24.99元，咨询电话4000600611。"></textarea>
+            <div class="parser-actions">
+              <button type="button" id="aiParseSmsBtn" class="primary">AI自动标注</button>
+              <button type="button" id="parseSmsBtn" class="primary">自动标注并生成</button>
+              <button type="button" id="clearSmsBtn">清空模板</button>
+            </div>
+            <label class="raw-mode-toggle"><input type="checkbox" id="rawOriginalModeToggle"> 未标注时按原文展示</label>
+            <details class="ai-config">
+              <summary>AI 标注配置（静态副本已禁用）</summary>
+              <label>本机代理<input id="aiEndpointInput" value="" disabled placeholder="静态副本已禁用"></label>
+              <label>上游接口<input id="aiUpstreamInput" value="" disabled placeholder="静态副本已禁用"></label>
+              <label>网络代理<input id="aiNetworkProxyInput" value="" disabled placeholder="静态副本已禁用"></label>
+              <label>模型名称<input id="aiModelInput" value="" disabled placeholder="静态副本已禁用"></label>
+              <label>API Key<input id="aiKeyInput" value="" disabled placeholder="静态副本已禁用"></label>
+            </details>
+            <p>自动标注后会同步短信意图标题、字段、下一步按钮文案和按钮链接，所有内容仍可手动修改。</p>
+          </div>
+
+          <h2>模板信息</h2>
+          <label>厂商模板<input id="factoryTemplateName" value="OPPO 短信卡片" readonly></label>
+
+          <h2>基础信息</h2>
+          <label>配置名称<input id="configNameInput" value="联通话费余额预警"></label>
+          <label>商户名称<input data-preview="merchantName" value="106967902"></label>
+          <label>通道号<input data-preview="channelNo" value="10000"></label>
+          <label>短信分类<input data-preview="smsCategory" value="余额提醒"></label>
+          <label class="icon-color-field" id="sourceIconColorField">分类图标
+            <span class="icon-color-options" id="sourceIconColorOptions">
+              <label><input type="radio" name="sourceIconColor" value="#2d7df0" checked><span class="swatch blue"></span>蓝色</label>
+              <label><input type="radio" name="sourceIconColor" value="#f6b51e"><span class="swatch yellow"></span>黄色</label>
+              <label><input type="radio" name="sourceIconColor" value="#24a85a"><span class="swatch green"></span>绿色</label>
+              <label><input type="radio" name="sourceIconColor" value="#ef6b45"><span class="swatch orange"></span>橙色</label>
+            </span>
+          </label>
+
+          <h2>卡片内容</h2>
+          <label>卡片标题<textarea data-preview="cardTitle">话费余额情况，APP充值抢优惠</textarea></label>
+
+          <div id="vivoTipEditor" hidden>
+            <label class="raw-mode-toggle"><input type="checkbox" id="vivoTipToggle"> 小贴士 / 推荐语</label>
+            <label id="vivoTipTextField" hidden>推荐语内容<input type="text" id="vivoTipInput" placeholder="#帮我查一下快递到哪里了？"></label>
+          </div>
+
+          <div class="kv-editor">
+            <div class="kv-title-row">
+              <div>
+                <strong>key-value 字段</strong>
+                <p>可新增、删除字段；key 名和值都会实时同步到右侧卡片。</p>
+              </div>
+              <button type="button" id="addKvBtn">添加字段</button>
+            </div>
+            <div class="kv-head">
+              <span aria-hidden="true"></span>
+              <span>key 名</span>
+              <span>value 值</span>
+              <span id="kvStyleLabel">绿色下划线</span>
+              <span>操作</span>
+            </div>
+            <div id="kvList" class="kv-list"></div>
+          </div>
+
+          <h2>按钮配置</h2>
+          <label>按钮文案<input data-preview="buttonText" value="APP活动充50元送220元权益券"></label>
+          <div class="emoji-picker" id="emojiPicker" aria-label="常用按钮 emoji">
+            <button type="button" data-emoji="🔥">🔥</button>
+            <button type="button" data-emoji="⚡">⚡</button>
+            <button type="button" data-emoji="🎁">🎁</button>
+            <button type="button" data-emoji="🧧">🧧</button>
+            <button type="button" data-emoji="👉">👉</button>
+            <button type="button" data-emoji="💰">💰</button>
+            <button type="button" data-emoji="💳">💳</button>
+            <button type="button" data-emoji="📦">📦</button>
+            <button type="button" data-emoji="🚚">🚚</button>
+            <button type="button" data-emoji="🔔">🔔</button>
+            <button type="button" data-emoji="📢">📢</button>
+            <button type="button" data-emoji="🧾">🧾</button>
+            <button type="button" data-emoji="📱">📱</button>
+          </div>
+          <label>按钮链接<input id="buttonLinkInput" value="https://example.com/recharge"></label>
+          <div id="vivoActionEditor" hidden>
+            <div id="vivoActionList"></div>
+            <button type="button" id="addVivoActionBtn">添加按钮</button>
+          </div>
+
+          <div id="menuEditor" class="menu-editor" hidden>
+            <div class="menu-title-row">
+              <div>
+                <strong>底部菜单</strong>
+                <p>OPPO/荣耀模板最多配置 3 个菜单；不配置时显示原始短信输入栏。</p>
+              </div>
+              <button type="button" id="addMenuBtn">添加菜单</button>
+            </div>
+            <div class="menu-head">
+              <span>菜单文案</span>
+              <span>操作</span>
+            </div>
+            <div id="menuList" class="menu-list"></div>
+          </div>
+        </form>
+
+        <div class="preview-panel">
+          <div class="template-meta">
+            <div>
+              <span>当前模板</span>
+              <strong id="templateName">OPPO 短信卡片</strong>
+            </div>
+            <button type="button" id="saveImageBtn" class="save-image-btn">保存图片</button>
+          </div>
+
+          <div id="phonePreview" class="phone-frame template-oppo" aria-label="短信卡片预览">
+            <div class="phone-status">
+              <strong>16:01</strong>
+              <span class="phone-icons">⌁ WiFi ▣ 46</span>
+            </div>
+            <div class="chat-head">
+              <span class="back">‹</span>
+              <span class="carrier-logo honor-logo" aria-hidden="true"></span>
+              <div>
+                <div class="carrier" id="merchantName">106967902</div>
+                <div class="number" id="channelNo">10000</div>
+              </div>
+              <div class="head-icons"><span class="phone-icon" aria-label="电话"></span><span class="more-icon">⋮</span></div>
+            </div>
+            <div class="chat-time">15:51</div>
+
+            <article class="sms-card">
+              <div class="source-row">
+                <span class="source-icon"></span>
+                <span id="smsCategory">余额提醒</span>
+              </div>
+              <div class="honor-notice">通 知</div>
+              <h3 id="cardTitle">话费余额情况，APP充值抢优惠</h3>
+              <div id="rawSmsPreview" class="raw-sms-preview" hidden></div>
+              <div id="kvPreview" class="kv-preview"></div>
+              <div id="vivoTipPreview" class="vivo-tip-preview" hidden></div>
+              <div class="card-action-row" id="cardActionRow">
+                <button class="card-button" id="buttonText">APP活动充50元送220元权益券</button>
+              </div>
+            </article>
+
+            <a class="origin-link"><span class="origin-time">3分钟前</span><span class="origin-text" id="originText">显示原文</span></a>
+            <div class="message-compose">
+              <button class="compose-plus" aria-label="添加">+</button>
+              <div class="compose-input">短信</div>
+              <button class="compose-emoji" aria-label="表情">☻</button>
+              <button class="compose-send" aria-label="发送">➤</button>
+            </div>
+            <div id="honorMenuPreview" class="oppo-bottom-actions honor-bottom-actions"></div>
+          </div>
+        </div>
+      </div>
     </section>
-    <section id="check" class="page"><div class="page-head"><h1>预览与校验</h1><button id="backEdit">返回编辑</button></div><div class="panel result"><div class="ok">校验通过，可在本地继续演示</div><p>当前配置未连接任何后端，也不会导出真实业务数据。</p></div></section>
-  </main><script src="demo.js"></script>
+
+    <section id="check" class="page">
+      <div class="page-head">
+        <h1>预览与校验</h1>
+        <button id="backEdit">返回编辑</button>
+      </div>
+      <div class="panel result">
+        <div class="ok">校验通过，可发布或导出配置</div>
+        <p>当前配置已满足标题、字段、按钮链接和导出格式要求。</p>
+        <button class="primary">导出配置</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="batch-data.js?v=20260903-1"></script>
+  <script src="mobile-data.js?v=20260827-1"></script>
+  <script src="unicom-data.js?v=20260828-1"></script>
+  <script src="meituan-data.js?v=20260828-1"></script>
+  <script src="fengchao-data.js?v=20260915-1"></script>
+  <script src="app.js?v=20261104-3"></script>
 </body>
 </html>
