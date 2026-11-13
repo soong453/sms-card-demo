@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>短信卡片配置原型</title>
-  <link rel="stylesheet" href="styles.css?v=20261104-3">
+  <link rel="stylesheet" href="styles.css?v=20261112-1">
 </head>
 <body>
   <aside class="sidebar">
@@ -17,7 +17,7 @@
 
   <header class="topbar">
     <span>运营配置后台</span>
-    <span class="user">本地用户</span>
+    <span class="user">soong</span>
   </header>
 
   <main>
@@ -120,12 +120,20 @@
             </div>
             <label class="raw-mode-toggle"><input type="checkbox" id="rawOriginalModeToggle"> 未标注时按原文展示</label>
             <details class="ai-config">
-              <summary>AI 标注配置（静态副本已禁用）</summary>
-              <label>本机代理<input id="aiEndpointInput" value="" disabled placeholder="静态副本已禁用"></label>
-              <label>上游接口<input id="aiUpstreamInput" value="" disabled placeholder="静态副本已禁用"></label>
-              <label>网络代理<input id="aiNetworkProxyInput" value="" disabled placeholder="静态副本已禁用"></label>
-              <label>模型名称<input id="aiModelInput" value="" disabled placeholder="静态副本已禁用"></label>
-              <label>API Key<input id="aiKeyInput" value="" disabled placeholder="静态副本已禁用"></label>
+              <summary>AI 标注配置（本机测试）</summary>
+              <label>本机代理<input id="aiEndpointInput" value="http://127.0.0.1:8787/v1/chat/completions"></label>
+              <label>上游接口<input id="aiUpstreamInput" value="https://aif.teddymobile.cn/v1/chat/completions"></label>
+              <label>网络代理<input id="aiNetworkProxyInput" placeholder="可选，例如 http://127.0.0.1:7890"></label>
+              <label>模型名称
+                <input id="aiModelInput" list="aiModelOptions" value="gpt-6.1-sol" autocomplete="off">
+                <datalist id="aiModelOptions">
+                  <option value="gpt-6.1-sol">最新 6.1</option>
+                  <option value="gpt-6.1">GPT 6.1</option>
+                  <option value="gpt-5.2">GPT 5.2</option>
+                  <option value="gpt-4o-mini">GPT-4o mini</option>
+                </datalist>
+              </label>
+              <label>API Key<input id="aiKeyInput" type="password" placeholder="可选；接口要求鉴权时再填写"></label>
             </details>
             <p>自动标注后会同步短信意图标题、字段、下一步按钮文案和按钮链接，所有内容仍可手动修改。</p>
           </div>
@@ -283,6 +291,6 @@
   <script src="unicom-data.js?v=20260828-1"></script>
   <script src="meituan-data.js?v=20260828-1"></script>
   <script src="fengchao-data.js?v=20260915-1"></script>
-  <script src="app.js?v=20261104-3"></script>
+  <script src="app.js?v=20261112-1"></script>
 </body>
 </html>

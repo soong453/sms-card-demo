@@ -104,6 +104,8 @@ const aiUpstreamInput = document.getElementById("aiUpstreamInput");
 const aiNetworkProxyInput = document.getElementById("aiNetworkProxyInput");
 const aiModelInput = document.getElementById("aiModelInput");
 const aiKeyInput = document.getElementById("aiKeyInput");
+// Keep the prototype aligned with the platform's current 6.1 model.
+const DEFAULT_AI_MODEL = "gpt-6.1-sol";
 const sourceIconColorOptions = document.getElementById("sourceIconColorOptions");
 const sourceIconColorField = document.getElementById("sourceIconColorField");
 const kvStyleLabel = document.getElementById("kvStyleLabel");
@@ -454,7 +456,12 @@ function migrateZhaoshangOppoButtonTextsOnce() {
 }
 
 function syncDraftsToDisk(drafts) {
-  // 静态副本仅使用本地草稿，不进行后台同步。
+  if (!Array.isArray(drafts) || !window.fetch) return;
+  fetch("/api/sync-drafts", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ drafts })
+  }).catch(() => {});
 }
 
 function collectCurrentConfig(options = {}) {
@@ -1406,9 +1413,70 @@ function hydrateBatchConfigs() {
 }
 
 async function parseSmsTemplateWithAi(text) {
-  throw new Error("静态副本已禁用 AI 联网标注，请使用本地自动标注。");
-}
+  const endpoint = aiEndpointInput.value.trim();
+  const upstream = aiUpstreamInput.value.trim();
+  const networkProxy = aiNetworkProxyInput.value.trim();
+  const model = aiModelInput.value.trim();
+  const apiKey = normalizeApiKey(aiKeyInput.value);
+  if (!endpoint || !upstream || !model) throw new Error("请填写本机代理、上游接口和模型名称。");
+  assertAsciiHeaderValue("API Key", apiKey);
+  assertAsciiHeaderValue("上游接口", upstream);
+  assertAsciiHeaderValue("网络代理", networkProxy);
 
+  const systemPrompt = [
+    "你是短信卡片配置标注助手，只返回 JSON，不要解释。",
+    "JSON 字段：merchantName, channelNo, smsCategory, cardTitle, buttonText, buttonLink, kv。",
+    "channelNo 要填对应商户官方号码，优先根据短信签名中的商户判断：中国电信=10000，中国移动=10086，中国联通=10010，建设银行=95533，工商银行=95588，农业银行=95599，中国银行=95566，招商银行=95555，交通银行=95559，中信银行=95558，平安银行=95511，民生银行=95568，光大银行=95595，华夏银行=95577，浦发银行=95528，兴业银行=95561，广发银行=4008308003，国家电网/电力=95598，丰巢=95333，EMS=11183。",
+    "cardTitle 要表达短信意图，突出用户收益或风险，建议 12-22 个中文字符。",
+    "buttonText 必须以一个 emoji 开头，例如 🔥 ⚡ 👉 🎁，突出 APP 卖点活动，最长 16 字。",
+    "buttonLink 优先使用短信中的链接；没有链接则生成 app://action?scene=xxx。",
+    "kv 提取 3-8 个关键字段；手机号、电话、时间、日期、链接等 highlight=true。"
+  ].join("\n");
+  const request = requestModel => fetch(endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(apiKey ? { Authorization: "Bearer " + apiKey } : {}),
+      "X-AI-Upstream": upstream,
+      "X-Network-Proxy": networkProxy
+    },
+    body: JSON.stringify({
+      model: requestModel,
+      temperature: 0.2,
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: text }
+      ]
+    })
+  });
+
+  let response = await request(model);
+  let errorText = "";
+  if (!response.ok) {
+    errorText = await response.text();
+    const modelUnavailable = response.status === 404 && /model_not_found|not available for this group/i.test(errorText);
+    if (modelUnavailable && model !== DEFAULT_AI_MODEL) {
+      response = await request(DEFAULT_AI_MODEL);
+      if (response.ok) {
+        aiModelInput.value = DEFAULT_AI_MODEL;
+      } else {
+        errorText = await response.text();
+      }
+    }
+  }
+
+  if (!response.ok) {
+    const modelHint = /model_not_found|not available for this group/i.test(errorText)
+      ? "当前模型“" + model + "”不可用，请在上游接口开通模型，或改用 " + DEFAULT_AI_MODEL + "。"
+      : "";
+    throw new Error("AI 接口请求失败：" + response.status + " " + modelHint + "\n" + errorText.slice(0, 180));
+  }
+
+  const data = await response.json();
+  const content = data.choices?.[0]?.message?.content;
+  if (!content) throw new Error("AI 接口没有返回可用内容。");
+  return normalizeAiParsedResult(extractJsonFromText(content), text);
+}
 function applyParsedSms(parsed) {
   if (configs[currentConfigKey]) configs[currentConfigKey].rawOriginalMode = false;
   if (rawOriginalModeToggle) rawOriginalModeToggle.checked = false;
