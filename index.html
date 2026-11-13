@@ -120,7 +120,7 @@
             </div>
             <label class="raw-mode-toggle"><input type="checkbox" id="rawOriginalModeToggle"> 未标注时按原文展示</label>
             <details class="ai-config">
-              <summary>AI 标注配置（本机测试）</summary>
+              <summary>AI 标注配置（本机测试，不影响作品展示）</summary>
               <label>本机代理<input id="aiEndpointInput" value="http://127.0.0.1:8787/v1/chat/completions"></label>
               <label>上游接口<input id="aiUpstreamInput" value="https://aif.teddymobile.cn/v1/chat/completions"></label>
               <label>网络代理<input id="aiNetworkProxyInput" placeholder="可选，例如 http://127.0.0.1:7890"></label>
@@ -286,11 +286,7 @@
     </section>
   </main>
 
-  <script src="batch-data.js?v=20260903-1"></script>
-  <script src="mobile-data.js?v=20260827-1"></script>
-  <script src="unicom-data.js?v=20260828-1"></script>
-  <script src="meituan-data.js?v=20260828-1"></script>
-  <script src="fengchao-data.js?v=20260915-1"></script>
-  <script src="app.js?v=20261112-1"></script>
+  <!-- Public portfolio view intentionally loads one curated example per vendor. -->
+  <script src="app.js?v=20261113-portfolio"></script>
 </body>
 </html>
