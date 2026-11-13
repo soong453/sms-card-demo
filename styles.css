@@ -1603,7 +1603,316 @@ label {
   }
 
   .preview-panel {
-    width: fit-content;
+    width: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  body {
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 10px 12px;
+    border-right: 0;
+    border-bottom: 1px solid #dee0e3;
+  }
+
+  .brand {
+    flex: 0 0 auto;
+    margin: 0 10px 0 0;
+    font-size: 16px;
+  }
+
+  .nav {
+    flex: 0 0 auto;
+    width: auto;
+    height: 34px;
+    padding: 0 10px;
+    margin: 0;
+    white-space: nowrap;
+    font-size: 13px;
+  }
+
+  .topbar {
+    position: static;
+    height: 42px;
+    padding: 0 14px;
+    font-size: 12px;
+  }
+
+  main {
+    margin-left: 0;
+    padding: 14px 12px 28px;
+  }
+
+  .page-head,
+  .title-with-back,
+  .actions {
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .page-head {
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .title-with-back {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .title-with-back h1 {
+    flex: 1 1 150px;
+    font-size: 18px;
+  }
+
+  .editor-nav {
+    width: 100%;
+    margin: 0;
+  }
+
+  .editor-nav button {
+    flex: 1;
+  }
+
+  .actions {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .actions button {
+    flex: 1 1 30%;
+    min-width: 0;
+    padding: 0 8px;
+    font-size: 13px;
+  }
+
+  .toolbar {
+    display: grid;
+    grid-template-columns: 1fr 64px;
+    gap: 8px;
+  }
+
+  .toolbar input,
+  .toolbar select,
+  .clear-search {
+    width: 100%;
+  }
+
+  .toolbar input {
+    grid-column: 1 / -1;
+  }
+
+  table,
+  thead,
+  tbody,
+  tr,
+  th,
+  td {
+    display: block;
+  }
+
+  table {
+    border: 0;
+    background: transparent;
+  }
+
+  thead {
+    display: none;
+  }
+
+  #configTableBody tr {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 5px 10px;
+    margin-bottom: 10px;
+    padding: 13px 14px;
+    border: 1px solid #e5e8ed;
+    border-radius: 10px;
+    background: #fff;
+  }
+
+  #configTableBody td {
+    width: auto !important;
+    height: auto;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #configTableBody td:nth-child(1) {
+    grid-column: 1 / 2;
+    font-weight: 700;
+  }
+
+  #configTableBody td:nth-child(2),
+  #configTableBody td:nth-child(3),
+  #configTableBody td:nth-child(4),
+  #configTableBody td:nth-child(5) {
+    color: #646a73;
+    font-size: 12px;
+  }
+
+  #configTableBody td:nth-child(6) {
+    grid-column: 1 / -1;
+    color: #646a73;
+    font-size: 13px;
+  }
+
+  #configTableBody td:nth-child(7) {
+    display: none;
+  }
+
+  #configTableBody td:nth-child(8) {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+  }
+
+  #configTableBody td:nth-child(9) {
+    position: absolute;
+    right: 14px;
+    bottom: 12px;
+  }
+
+  .editor-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .panel,
+  .preview-panel {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+  }
+
+  .panel label,
+  .ai-config label {
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .panel label > input,
+  .panel label > textarea,
+  .panel label > select,
+  .ai-config label > input {
+    display: block;
+    margin-top: 6px;
+  }
+
+  .parser-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .parser-actions button:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .emoji-picker,
+  .kv-editor,
+  .menu-editor {
+    margin-left: 0;
+  }
+
+  .kv-head {
+    display: none;
+  }
+
+  .kv-edit-row {
+    grid-template-columns: 24px 1fr 36px;
+    gap: 7px;
+    padding: 10px 0;
+    border-bottom: 1px solid #edf0f3;
+  }
+
+  .kv-edit-row .kv-key,
+  .kv-edit-row .kv-value {
+    grid-column: 2 / -1;
+  }
+
+  .kv-edit-row .kv-style-toggle {
+    grid-column: 2 / 3;
+  }
+
+  .kv-edit-row .danger {
+    grid-column: 3;
+    grid-row: 1;
+    padding: 0;
+  }
+
+  .menu-head {
+    display: none;
+  }
+
+  .menu-edit-row {
+    grid-template-columns: 1fr 48px;
+  }
+
+  .template-meta {
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .template-meta strong {
+    display: block;
+    margin: 2px 0 0;
+  }
+
+  .phone-frame {
+    width: 100%;
+    max-width: 390px;
+    height: min(858px, 170vw);
+    margin: 0 auto;
+    border-radius: 10px;
+  }
+
+  .phone-frame .sms-card,
+  .template-oppo .sms-card,
+  .template-honor .sms-card {
+    width: calc(100% - 24px);
+    max-width: 340px;
+  }
+
+  .template-vivo .sms-card {
+    width: calc(100% - 24px);
+  }
+
+  .result {
+    width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  main {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .panel,
+  .preview-panel {
+    padding: 11px;
+  }
+
+  .actions button {
+    font-size: 12px;
   }
 }
 
