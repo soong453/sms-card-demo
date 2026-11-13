@@ -1005,7 +1005,7 @@ label {
 }
 
 .template-honor .chat-time::before {
-  content: "鐭俊/褰╀俊";
+  content: "短信/彩信";
   display: block;
   margin-bottom: 4px;
 }
